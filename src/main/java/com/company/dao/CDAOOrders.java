@@ -1,9 +1,11 @@
 package com.company.dao;
 
+import com.company.model.CGood;
 import com.company.model.COrder;
 import com.company.model.COrder;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,5 +85,23 @@ public class CDAOOrders implements IDAO<COrder>{
         } catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    public List<COrder> getByGood(CGood good){
+        List<COrder> orders;
+        try(Session session = sessionFactory.openSession())
+        {
+            Query<COrder> query = session.createQuery("SELECT o from COrder o JOIN o.goods g where g.id=:id");
+            query.setParameter("id", good.getId());
+
+            orders =         query.list();
+        }
+        catch(Exception e)
+        {
+            orders = new ArrayList<>();
+            e.printStackTrace();
+        }
+        return orders;
+
     }
 }

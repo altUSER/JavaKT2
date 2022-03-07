@@ -5,6 +5,7 @@ import org.hibernate.id.UUIDGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,6 +34,21 @@ public class CUser {
 
     public List<COrder> getOrders() { return orders; }
     public void setOrders(List<COrder> orders) { this.orders = orders; }
+
+    public UUID getId() {return id;}
+
+    public String getLogin() {return login;}
+    public void setLogin(String login) {this.login = login;}
+
+    public String getName() {return name;}
+    public void setName(String name) {this.name = name;}
+
+    public boolean getSex() {return sex;}
+    public void setSex(boolean sex) {this.sex = sex;}
+
+    public LocalDate getDateOfBirth() {return dateOfBirth;}
+    public void setDateOfBirth() {this.sex = sex;}
+
 
     public CUser(){
         id = null;

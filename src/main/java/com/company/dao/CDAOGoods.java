@@ -1,6 +1,7 @@
 package com.company.dao;
 
 import com.company.model.CGood;
+import com.company.model.COrder;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
@@ -70,6 +71,40 @@ public class CDAOGoods implements IDAO<CGood>{
         } catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    public void updateList(List<CGood> users)
+    {
+        try(Session session = sessionFactory.openSession())
+        {
+            for (int i=0; i<users.size(); i++) {
+                session.beginTransaction();
+                for (int j = 0; j<1000 && i<users.size(); j++, i++)
+                    session.update(users.get(i));
+                session.getTransaction().commit();
+            }
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public List<COrder> getGoodOrders(UUID gid)
+    {
+        CGood good = null;
+        List<COrder> orders;
+        try(Session session = sessionFactory.openSession())
+        {
+            good = session.get(CGood.class, gid);
+            orders = good.getOrders();
+        }
+        catch(Exception e)
+        {
+            orders = new ArrayList<>();
+            e.printStackTrace();
+        }
+        return orders;
     }
 
     @Override

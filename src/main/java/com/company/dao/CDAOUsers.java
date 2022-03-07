@@ -73,6 +73,23 @@ public class CDAOUsers implements IDAO<CUser>{
         }
     }
 
+    public void updateList(List<CUser> users)
+    {
+        try(Session session = sessionFactory.openSession())
+        {
+            for (int i=0; i<users.size(); i++) {
+                session.beginTransaction();
+                for (int j = 0; j<1000 && i<users.size(); j++, i++)
+                    session.update(users.get(i));
+                session.getTransaction().commit();
+            }
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void delete(CUser user){
         try(Session session = sessionFactory.openSession()){

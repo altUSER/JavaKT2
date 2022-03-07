@@ -29,6 +29,8 @@ public class CGood {
     private List<COrder> orders;
 
 
+    public UUID getId() { return id; }
+
     public String getName(){ return name; }
     public void setName(String name){ this.name = name; }
 
@@ -47,6 +49,14 @@ public class CGood {
         this.name = "";
         this.price = 0;
         this.category = "";
+    }
+
+    public CGood(UUID id, String name, double price, String category, List<COrder> orders){
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.category = category;
+        this.orders = orders;
     }
 
     public CGood(UUID id, String name, double price, String category){
