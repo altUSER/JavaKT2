@@ -3,9 +3,7 @@ package com.company.model;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -21,27 +19,30 @@ public class COrder {
     @JoinColumn(name = "owner", nullable = false)
     public CUser owner;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "goods_in_orders", joinColumns = @JoinColumn(name = "order_id"), inverseJoinColumns = @JoinColumn(name = "good_id"))
-    List<CGood> goods;
+    @ManyToOne
+    @JoinColumn(name = "good", nullable = false)
+    public CGood good;
 
-    @Column(name = "date", columnDefinition = "DATE")
+    @Column(name = "date", columnDefinition = "timestamp")
     public Date date;
 
 
     public UUID getId(){ return id; }
     public CUser getOwner(){ return owner; }
     public void setOwner(CUser owner){ this.owner = owner; }
-    public  List<CGood> getGoods() { return goods; }
+    public  CGood getGood() { return good; }
 
     public COrder(){
         this.id = null;
         this.owner = null;
+        this.good = null;
+        this.date = new Date();
     }
 
-    public COrder(UUID id, CUser owner, Date date){
+    public COrder(UUID id, CUser owner, CGood good, Date date){
         this.id = id;
         this.owner = owner;
+        this.good = good;
         this.date = date;
     }
 }

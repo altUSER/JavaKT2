@@ -1,6 +1,7 @@
 package com.company;
 
 import com.company.config.CConfigHibernate;
+import com.company.dao.CDAOGoods;
 import com.company.dao.CDAOOrders;
 import com.company.dao.CDAOUsers;
 import com.company.model.CGood;
@@ -23,9 +24,9 @@ import org.apache.poi.xwpf.usermodel.*;
 import org.hibernate.Session;
 
 public class Main {
-/*
-    private static ArrayList loadGoods() {
-        ArrayList<CGood> goods = new ArrayList<>();
+
+    private static void loadGoods() {
+        CDAOGoods daoGoods = new CDAOGoods(CConfigHibernate.getSessionFactory());
 
         try {
             FileInputStream file = new FileInputStream("data/Magazin.xlsx");
@@ -40,9 +41,9 @@ public class Main {
                     continue;
                 }
 
-                UUID id = UUID.fromString(row.getCell(0).toString());
                 double pice = Double.valueOf(row.getCell(2).toString());
-                goods.add(new CGood(id, row.getCell(1).toString(), pice, row.getCell(3).toString()));
+                CGood good = new CGood(UUID.fromString(row.getCell(0).toString()), row.getCell(1).toString(), pice, row.getCell(3).toString());
+                daoGoods.save(good);
             }
             file.close();
 
@@ -52,7 +53,6 @@ public class Main {
             e.printStackTrace();
         }
 
-        return goods;
     }
 
     private static void report(ArrayList goodNames, ArrayList counts) {
@@ -92,9 +92,11 @@ public class Main {
             e.printStackTrace();
         }
     }
-*/
-    private static List loadOrders() {
-        ArrayList<COrder> orders = new ArrayList<>();
+
+    private static void loadOrders() {
+        CDAOUsers daoUsers = new CDAOUsers(CConfigHibernate.getSessionFactory());
+        CDAOOrders daoOrders = new CDAOOrders(CConfigHibernate.getSessionFactory());
+        CDAOGoods daoGoods = new CDAOGoods(CConfigHibernate.getSessionFactory());
 
         try {
             FileInputStream file = new FileInputStream("C:/dv/java/un1/data/Magazin.xlsx");
@@ -109,9 +111,13 @@ public class Main {
                     continue;
                 }
 
+
+
                 UUID uid = UUID.fromString(row.getCell(0).toString());
                 UUID gid = UUID.fromString(row.getCell(1).toString());
-                //orders.add(new COrder(uid, gid, row.getCell(2).getDateCellValue()));
+                COrder order = new COrder(UUID.randomUUID(), daoUsers.get(uid), daoGoods.get(gid), row.getCell(2).getDateCellValue());
+
+                daoOrders.save(order);
             }
             file.close();
 
@@ -121,13 +127,11 @@ public class Main {
             e.printStackTrace();
         }
 
-        List<COrder> outpOrders = orders;
-        return outpOrders;
     }
 
-    private static List loadUsers() {
+    private static void loadUsers() {
 
-        ArrayList<CUser> users = new ArrayList<>();
+        CDAOUsers daoUsers = new CDAOUsers(CConfigHibernate.getSessionFactory());
 
 
         try {
@@ -142,9 +146,11 @@ public class Main {
                 if (row == null) {
                     continue;
                 }
-                UUID id = UUID.fromString(row.getCell(0).toString());
+
                 Date date = row.getCell(4).getDateCellValue();
-                users.add(new CUser(id, row.getCell(1).toString(), row.getCell(2).toString(), row.getCell(3).toString().equals("ж"), date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()));
+                CUser user = new CUser(UUID.fromString(row.getCell(0).toString()), row.getCell(1).toString(), row.getCell(2).toString(), row.getCell(3).toString().equals("ж"), date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+
+                daoUsers.save(user);
             }
             file.close();
 
@@ -153,9 +159,6 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        List<CUser> outpUsers = users;
-        return outpUsers;
 
     }
 /*
@@ -183,9 +186,11 @@ public class Main {
 */
     public static void main(String[] args) {
         //count();
+        System.out.println("ttt");
 
-        CDAOUsers daoUsers = new CDAOUsers(CConfigHibernate.getSessionFactory());
-        CDAOOrders daoOrders = new CDAOOrders(CConfigHibernate.getSessionFactory());
+//        CDAOUsers daoUsers = new CDAOUsers(CConfigHibernate.getSessionFactory());
+//        CDAOOrders daoOrders = new CDAOOrders(CConfigHibernate.getSessionFactory());
+//        CDAOGoods daoGoods = new CDAOGoods(CConfigHibernate.getSessionFactory());
 
         //List<CUser> users= loadUsers();
         //daoUsers.saveList(users);
@@ -200,14 +205,17 @@ public class Main {
             daoUsers.save(user);
         }*/
 
+        System.out.println("Load users...");
+        loadUsers();
+        System.out.println("Done");
 
-        CUser user = new CUser();
-        user.id = UUID.fromString("6720a44c-af02-41e9-9d19-c4bb1c38c9a9");
-        user.login = "Alexander";
-        user.name = "Александр";
-        user.dateOfBirth = LocalDate.now();
-        daoUsers.save(user);
+        System.out.println("Load goods...");
+        loadGoods();
+        System.out.println("Done");
 
+        System.out.println("Load orders...");
+        loadOrders();
+        System.out.println("Done");
 
         }
 }

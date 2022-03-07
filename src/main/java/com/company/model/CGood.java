@@ -13,8 +13,6 @@ import java.util.UUID;
 public class CGood {
 
     @Id
-    @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
-    @GeneratedValue(generator = "UUIDGenerator")
     @Column(name = "id", updatable = false, nullable = false)
     public UUID id;
 
@@ -28,7 +26,7 @@ public class CGood {
     public String category;
 
 
-    @ManyToMany(mappedBy = "goods", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "good", fetch = FetchType.EAGER)
     private List<COrder> orders;
 
 
@@ -47,7 +45,6 @@ public class CGood {
         this.name = "";
         this.price = 0;
         this.category = "";
-        this.orders = new ArrayList<>();
     }
 
     public CGood(UUID id, String name, double price, String category){
