@@ -25,7 +25,6 @@ public class CGood {
     @Column(name = "category")
     public String category;
 
-
     @OneToMany(mappedBy = "good", fetch = FetchType.EAGER)
     private List<COrder> orders;
 
@@ -38,6 +37,9 @@ public class CGood {
 
     public String getCategory(){ return category; }
     public void setCategory(String category){ this.category = category; }
+
+    public List<COrder> getOrders() { return orders; }
+    public void setOrders(List<COrder> orders) { this.orders = orders; }
 
 
     public CGood(){

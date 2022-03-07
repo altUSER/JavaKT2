@@ -55,43 +55,6 @@ public class Main {
 
     }
 
-    private static void report(ArrayList goodNames, ArrayList counts) {
-        XWPFDocument document = new XWPFDocument();
-
-        XWPFParagraph par1 = document.createParagraph();
-        par1.setAlignment(ParagraphAlignment.CENTER);
-        XWPFRun title = par1.createRun();
-        title.setBold(true); //title
-        title.setFontFamily("TimesNewRoman");
-        title.setFontSize(16);
-        title.setText("Report");
-
-        XWPFParagraph par2 = document.createParagraph(); //description
-        par2.setAlignment(ParagraphAlignment.CENTER);
-        XWPFRun desc = par2.createRun();
-        desc.setFontFamily("TimesNewRoman");
-        desc.setFontSize(13);
-        desc.setText("Number of orders per good");
-
-        XWPFTable table = document.createTable();
-        XWPFTableRow row;
-        row = table.getRow(0); //title row
-        row.getCell(0).setText("Name");
-        row.addNewTableCell().setText("Count");
-
-        for (int i = 0; i < goodNames.size(); i++) { //fill table
-            row = table.createRow();
-            row.getCell(0).setText((String) goodNames.get(i));
-            row.getCell(1).setText(counts.get(i).toString());
-        }
-        table.setWidth("100%");
-
-        try(FileOutputStream output = new FileOutputStream("report.docx")) { //write to file
-            document.write(output);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     private static void loadOrders() {
         CDAOUsers daoUsers = new CDAOUsers(CConfigHibernate.getSessionFactory());
@@ -161,61 +124,80 @@ public class Main {
         }
 
     }
-/*
+
+    private static void report(ArrayList goodNames, ArrayList counts) {
+        XWPFDocument document = new XWPFDocument();
+
+        XWPFParagraph par1 = document.createParagraph();
+        par1.setAlignment(ParagraphAlignment.CENTER);
+        XWPFRun title = par1.createRun();
+        title.setBold(true); //title
+        title.setFontFamily("TimesNewRoman");
+        title.setFontSize(16);
+        title.setText("Report");
+
+        XWPFParagraph par2 = document.createParagraph(); //description
+        par2.setAlignment(ParagraphAlignment.CENTER);
+        XWPFRun desc = par2.createRun();
+        desc.setFontFamily("TimesNewRoman");
+        desc.setFontSize(13);
+        desc.setText("Number of orders per good");
+
+        XWPFTable table = document.createTable();
+        XWPFTableRow row;
+        row = table.getRow(0); //title row
+        row.getCell(0).setText("Name");
+        row.addNewTableCell().setText("Count");
+
+        for (int i = 0; i < goodNames.size(); i++) { //fill table
+            row = table.createRow();
+            row.getCell(0).setText((String) goodNames.get(i));
+            row.getCell(1).setText(counts.get(i).toString());
+        }
+        table.setWidth("100%");
+
+        try(FileOutputStream output = new FileOutputStream("report.docx")) { //write to file
+            document.write(output);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     public static void count() {
-        ArrayList goods = loadGoods();
-        ArrayList orders = loadOrders();
+        CDAOOrders daoOrders = new CDAOOrders(CConfigHibernate.getSessionFactory());
+        CDAOGoods daoGoods = new CDAOGoods(CConfigHibernate.getSessionFactory());
 
         ArrayList<String> resGoods = new ArrayList<>(); //result arrays
         ArrayList<Integer> resCounts = new ArrayList<Integer>();
+        List<CGood> goods = daoGoods.getAll();
 
         for (int i=0; i<goods.size(); i++){
-            CGood good = (CGood) goods.get(i);
-            int count = 0;
-            for (int k=0; k<orders.size(); k++) {
-                COrder order = (COrder) orders.get(k);
-                if (order.id.equals(good.id)) {
-                    count++;
-                }
-            }
-            resGoods.add(good.name);
-            resCounts.add(count);
+            resGoods.add(goods.get(i).getName());
+            resCounts.add(goods.get(i).getOrders().size());
         }
         report(resGoods, resCounts);
     }
-*/
+
     public static void main(String[] args) {
-        //count();
-        System.out.println("ttt");
 
 //        CDAOUsers daoUsers = new CDAOUsers(CConfigHibernate.getSessionFactory());
 //        CDAOOrders daoOrders = new CDAOOrders(CConfigHibernate.getSessionFactory());
 //        CDAOGoods daoGoods = new CDAOGoods(CConfigHibernate.getSessionFactory());
 
-        //List<CUser> users= loadUsers();
-        //daoUsers.saveList(users);
-        //CUser user = daoUsers.get(UUID.fromString("15724b7c-04d5-4b39-a18a-8991efe4ab91"));
-        //daoUsers.delete(user);
+        count();
 
-
-        /*
-        ArrayList<CUser> users = loadUsers();
-        //CUser user = new CUser();
-        for (CUser user:users){
-            daoUsers.save(user);
-        }*/
-
-        System.out.println("Load users...");
-        loadUsers();
-        System.out.println("Done");
-
-        System.out.println("Load goods...");
-        loadGoods();
-        System.out.println("Done");
-
-        System.out.println("Load orders...");
-        loadOrders();
-        System.out.println("Done");
+//        System.out.println("Load users...");
+//        loadUsers();
+//        System.out.println("Done");
+//
+//        System.out.println("Load goods...");
+//        loadGoods();
+//        System.out.println("Done");
+//
+//        System.out.println("Load orders...");
+//        loadOrders();
+//        System.out.println("Done");
 
         }
 }
