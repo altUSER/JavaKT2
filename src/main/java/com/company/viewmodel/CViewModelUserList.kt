@@ -15,4 +15,8 @@ class CViewModelUserList: ViewModel()
     fun save(user: CUserFX) {
         serviceUsers.save(user)
     }
+
+    fun update(){
+        val users = serviceUsers.getAll()
+    }
 }

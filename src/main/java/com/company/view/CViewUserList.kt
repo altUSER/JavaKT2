@@ -1,10 +1,13 @@
 package com.company.view
 
 
+import com.company.Main
 import com.company.modelfx.CUserFX
 import com.company.viewmodel.CViewModelEditUser
+import com.company.viewmodel.CViewModelGoodList
 import com.company.viewmodel.CViewModelUserList
 import javafx.scene.layout.BorderPane
+import org.apache.xmlbeans.impl.store.Public2.save
 import tornadofx.*
 
 class CViewUserList : View("Пользователи") {
@@ -15,6 +18,7 @@ class CViewUserList : View("Пользователи") {
     val tableView = tableview(CViewModelUserList.users) {
         readonlyColumn("ID", CUserFX::id)
         column("Логин", CUserFX::propertyLogin).makeEditable()
+        column("Имя", CUserFX::propertyName).makeEditable()
         column("Пол", CUserFX::propertySex).makeEditable()
         column("Дата рождения", CUserFX::propertyDateOfBirth).makeEditable()
         readonlyColumn("Возраст", CUserFX::age)
@@ -30,6 +34,11 @@ class CViewUserList : View("Пользователи") {
         menu("Правка") {
             item("Сохранить").action {CViewModelUserList.save()}
             item("Добавить").action {tableView.selectionModel.clearSelection()}
+            item("Обновить").action {CViewModelUserList.update()}
+            item("Загрузить данные из файла").action {
+                Main.loadAll()
+                CViewModelUserList.update()
+            }
                     }
                 }
             }
@@ -49,9 +58,7 @@ class CViewUserList : View("Пользователи") {
                         }
                         button("Сохранить") {
                             enableWhen(viewModelEditUser.dirty)
-                            action {
-                                save()
-                            }
+                            action { save() }
                         }
                         button("Отмена").action {
                             viewModelEditUser.rollback()

@@ -179,6 +179,21 @@ public class Main {
         report(resGoods, resCounts);
     }
 
+    public static void loadAll(){
+        System.out.println("Load users...");
+        loadUsers();
+        System.out.println("Done");
+
+        System.out.println("Load goods...");
+        loadGoods();
+        System.out.println("Done");
+
+        System.out.println("Load orders...");
+        loadOrders();
+        System.out.println("Done");
+    }
+
+
     public static void main(String[] args) {
 
 //        CDAOUsers daoUsers = new CDAOUsers(CConfigHibernate.getSessionFactory());

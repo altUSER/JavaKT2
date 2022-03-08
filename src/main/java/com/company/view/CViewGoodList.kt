@@ -1,7 +1,9 @@
 package com.company.view
 
+import com.company.Main
 import com.company.modelfx.CGoodFX
 import com.company.viewmodel.CViewModelGoodList
+import com.company.viewmodel.CViewModelUserList
 import tornadofx.*
 
 class CViewGoodList: View("Товары") {
@@ -25,14 +27,13 @@ class CViewGoodList: View("Товары") {
                     }
                 }
                 menu("Правка"){
-                    item("Сохранить").action{
-                        CviewModelGoodList.save()
-                    }
-                    item("Добавить").action{
-                        CviewModelGoodList.addNew()
-                    }
-                    item("Удалить").action{
-                        CviewModelGoodList.delete(tableView.selectedItem)
+                    item("Сохранить").action{ CviewModelGoodList.save() }
+                    item("Добавить").action{ CviewModelGoodList.addNew() }
+                    item("Удалить").action{ CviewModelGoodList.delete(tableView.selectedItem) }
+                    item("Обновить").action{ CviewModelGoodList.update() }
+                    item("Загрузить данные из файла").action {
+                        Main.loadAll()
+                        CviewModelGoodList.update()
                     }
                 }
             }

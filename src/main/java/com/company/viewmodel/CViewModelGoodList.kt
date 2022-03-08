@@ -20,4 +20,8 @@ class CViewModelGoodList: ViewModel() {
         serviceGoods.delete(good)
     }
 
+    fun update(){
+        val goods = serviceGoods.getAll()
+    }
+
 }
