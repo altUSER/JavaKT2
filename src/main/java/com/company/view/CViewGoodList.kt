@@ -22,9 +22,8 @@ class CViewGoodList: View("Товары") {
         top{
             menubar{
                 menu("Данные") {
-                    item("Пользователи").action {
-                        replaceWith<CViewUserList>()
-                    }
+                    item("Пользователи").action { replaceWith<CViewUserList>() }
+                    item("Заказы").action { replaceWith<CViewOrderList>() }
                 }
                 menu("Правка"){
                     item("Сохранить").action{ CviewModelGoodList.save() }
@@ -35,6 +34,7 @@ class CViewGoodList: View("Товары") {
                         Main.loadAll()
                         CviewModelGoodList.update()
                     }
+                    item("Создать отчет") { Main.count() }
                 }
             }
         }

@@ -4,8 +4,7 @@ import com.company.modelfx.CUserFX
 import com.company.services.CServiceUsers
 import tornadofx.ViewModel
 
-class CViewModelUserList: ViewModel()
-{
+class CViewModelUserList: ViewModel() {
     val serviceUsers: CServiceUsers by inject()
     val users = serviceUsers.getAll()
 

@@ -22,6 +22,7 @@ import java.util.Date;
 import com.company.model.CUser;
 import org.apache.poi.xwpf.usermodel.*;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
 public class Main {
 
@@ -165,7 +166,6 @@ public class Main {
 
 
     public static void count() {
-        CDAOOrders daoOrders = new CDAOOrders(CConfigHibernate.getSessionFactory());
         CDAOGoods daoGoods = new CDAOGoods(CConfigHibernate.getSessionFactory());
 
         ArrayList<String> resGoods = new ArrayList<>(); //result arrays
@@ -196,11 +196,13 @@ public class Main {
 
     public static void main(String[] args) {
 
-//        CDAOUsers daoUsers = new CDAOUsers(CConfigHibernate.getSessionFactory());
-//        CDAOOrders daoOrders = new CDAOOrders(CConfigHibernate.getSessionFactory());
+        CDAOUsers daoUsers = new CDAOUsers(CConfigHibernate.getSessionFactory());
+        CDAOOrders daoOrders = new CDAOOrders(CConfigHibernate.getSessionFactory());
 //        CDAOGoods daoGoods = new CDAOGoods(CConfigHibernate.getSessionFactory());
 
-        count();
+
+
+
 
 //        System.out.println("Load users...");
 //        loadUsers();

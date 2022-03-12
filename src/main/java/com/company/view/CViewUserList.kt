@@ -3,16 +3,12 @@ package com.company.view
 
 import com.company.Main
 import com.company.modelfx.CUserFX
-import com.company.viewmodel.CViewModelEditUser
-import com.company.viewmodel.CViewModelGoodList
 import com.company.viewmodel.CViewModelUserList
 import javafx.scene.layout.BorderPane
-import org.apache.xmlbeans.impl.store.Public2.save
 import tornadofx.*
 
-class CViewUserList : View("Пользователи") {
+class CViewUserList: View("Пользователи") {
     val CViewModelUserList: CViewModelUserList by inject()
-    val viewModelEditUser = CViewModelEditUser(CUserFX())
     override val root = BorderPane()
 
     val tableView = tableview(CViewModelUserList.users) {
@@ -30,7 +26,10 @@ class CViewUserList : View("Пользователи") {
     }
 
     init { with(root) { top { menubar {
-        menu("Данные") { item("Товары").action { replaceWith<CViewGoodList>()}}
+        menu("Данные") {
+            item("Товары").action { replaceWith<CViewGoodList>()}
+            item("Заказы").action { replaceWith<CViewOrderList>() }
+        }
         menu("Правка") {
             item("Сохранить").action {CViewModelUserList.save()}
             item("Добавить").action {tableView.selectionModel.clearSelection()}
@@ -39,40 +38,12 @@ class CViewUserList : View("Пользователи") {
                 Main.loadAll()
                 CViewModelUserList.update()
             }
+            item("Создать отчет") { Main.count() }
                     }
                 }
             }
             center { this += tableView }
-            right {
-                form {
-                    fieldset("Редактирование пользователя") {
-                        field("Логин") {
-                            textfield(viewModelEditUser.login)
-                        }
-                        field("Дата рождения") {
-                            datepicker(viewModelEditUser.dateOfBirth)
-                        }
-                        field("Пол") {
-                            choicebox(viewModelEditUser.sex)
-
-                        }
-                        button("Сохранить") {
-                            enableWhen(viewModelEditUser.dirty)
-                            action { save() }
-                        }
-                        button("Отмена").action {
-                            viewModelEditUser.rollback()
-                        }
-                    }
-                }
-            }
         }
-    }
-    private fun save() {
-        // Flush changes from the text fields into the model
-        viewModelEditUser.commit()
-
-        CViewModelUserList.save(viewModelEditUser.item)
     }
 
 }

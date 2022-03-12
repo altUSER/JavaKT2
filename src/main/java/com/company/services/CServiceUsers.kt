@@ -8,8 +8,7 @@ import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import tornadofx.Controller
 
-class CServiceUsers : Controller()
-{
+class CServiceUsers : Controller() {
     private var daoUsers = CDAOUsers(CConfigHibernate.getSessionFactory())
 
     val users = FXCollections.observableArrayList<CUserFX>()

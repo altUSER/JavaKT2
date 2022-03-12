@@ -118,13 +118,4 @@ public class CDAOGoods implements IDAO<CGood>{
         }
     }
 
-//    public void drop(){
-//        try(Session session = sessionFactory.openSession()){
-//            session.beginTransaction();
-//            session.
-//            session.getTransaction().commit();
-//        } catch (Exception e){
-//            e.printStackTrace();
-//        }
-//    }
 }
